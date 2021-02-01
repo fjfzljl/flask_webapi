@@ -1,0 +1,32 @@
+operation,url,spec,data,expected_status_code,actual_status_code,result,description
+POST,http://localhost/kvstore,,"{'name': 'tnt', 'value': 'Metrotown'}",201,409,Fail,valid post :  key not exists
+POST,http://localhost/kvstore,,"{'name': 'tnt', 'value': 'Metrotown'}",409,409,pass,invalid post : key already exists
+PUT,http://localhost/kvstore,,"{'name': 'tnt', 'value': 'put chg'}",200,200,pass,valid put : key already exists
+PUT,http://localhost/kvstore,,"{'name': 'tnt999', 'value': 'Metrotown'}",404,404,pass,invalid put : key not exists
+GET,http://localhost/kvstore,Costco,,200,200,pass,valid get : key already exists
+GET,http://localhost/kvstore,99_1,,404,404,pass,invalid get : key not exists
+GET,http://localhost/kvstore,,,200,200,pass,valid get all
+DELETE,http://localhost/kvstore,tnt,,200,200,pass,valid delete : key exists
+DELETE,http://localhost/kvstore,99_2,,404,404,pass,invalid delete : key not exists
+PATCH,http://localhost/kvstore,,,405,405,pass,other request : PATCH
+GET,http://localhost/kvstore,,,200,200,pass,special letter : get one record
+GET,http://localhost/kvstore,,,200,200,pass,special letter : get all records
+POST,http://localhost/kvstore,,"{'name': 's$%', 'value': 'Metrotown'}",201,201,pass,special letter : valid post :  key not exists
+POST,http://localhost/kvstore,,"{'name': 's$%', 'value': 'Metrotown'}",409,409,pass,special letter : invalid post : key already exists
+PUT,http://localhost/kvstore,,"{'name': 's$%', 'value': 'Metrotown'}",200,200,pass,special letter : valid put : key already exists
+PUT,http://localhost/kvstore,K%^%**()_+,"{'name': '!@s$%', 'value': 'Metrotown'}",404,404,pass,special letter : invalid put : key not exists
+GET,http://localhost/kvstore,,,200,200,pass,special letter : valid get : key already exists
+GET,http://localhost/kvstore,?s$%,,404,404,pass,special letter : invalid get : key not exists
+DELETE,http://localhost/kvstore,s$%,,200,200,pass,special letter : valid delete : key exists
+DELETE,http://localhost/kvstore,?s$%,,404,404,pass,special letter : invalid delete : key not exists
+POST,http://localhost/kvstore,,"{'name': 'tsp', 'value': ')(&'}",200,201,Fail,"special letter: field [""values""] : post"
+PUT,http://localhost/kvstore,,"{'name': 'tsp', 'value': ':><'}",200,200,pass,"special letter: field [""values""] : put"
+GET,http://localhost/kvstore,tsp,,200,200,pass,"special letter: field [""values""] : get one record"
+DELETE,http://localhost/kvstore,tsp,,200,200,pass,"special letter: field [""values""] : delete"
+GET,http://localhost/kvstore,,,200,200,pass,"special letter: field [""values""] : get all records"
+POST,http://localhost/kvstore,,"{'name': '', 'value': 'temp'}",200,409,Fail,empty field : post : field['name']
+POST,http://localhost/kvstore,,"{'name': 'temp', 'value': ''}",200,201,Fail,empty field : post : field['value']
+POST,http://localhost/kvstore,,"{'name': '', 'value': ''}",200,409,Fail,empty field : post : field['name'] and field['value']
+PUT,http://localhost/kvstore,,"{'name': '', 'value': 'temp'}",200,200,pass,empty field : put : field['name']
+PUT,http://localhost/kvstore,,"{'name': 'temp', 'value': ''}",200,200,pass,empty field : put : field['value']
+PUT,http://localhost/kvstore,,"{'name': '', 'value': ''}",200,200,pass,empty field : put : field['name'] and field['value']
